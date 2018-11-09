@@ -274,6 +274,9 @@ class CopilotModal extends Component<Props, State> {
   };
 
   renderMask() {
+    const { currentStep } = this.props;
+    const { onElementPress } = currentStep;
+    const onPress = onElementPress || null;
     /* eslint-disable global-require */
     const MaskComponent =
       this.props.overlay === 'svg' ? require('./SvgMask').default : require('./ViewMask').default;
@@ -289,7 +292,7 @@ class CopilotModal extends Component<Props, State> {
         easing={this.props.easing}
         animationDuration={this.props.animationDuration}
         backdropColor={this.props.backdropColor}
-        onPress={this.onMaskPress}
+        onPress={onElementPress}
       />
     );
   }
