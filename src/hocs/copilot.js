@@ -179,6 +179,9 @@ const copilot = ({
           <WrappedComponent
             {...this.props}
             start={this.start}
+            next={this.next}
+            prev={this.prev}
+            stop={this.stop}
             currentStep={this.state.currentStep}
             visible={this.state.visible}
             copilotEvents={this.eventEmitter}
