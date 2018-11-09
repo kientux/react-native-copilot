@@ -87,14 +87,10 @@ class CopilotModal extends Component<Props, State> {
     containerVisible: false,
   };
 
-  _lastStep = this.props.currentStep;
-
   componentWillReceiveProps(nextProps: Props) {
     if (this.props.visible === true && nextProps.visible === false) {
       this.reset();
     }
-
-    this._lastStep = this.props.currentStep;
   }
 
   layout = {
@@ -261,19 +257,29 @@ class CopilotModal extends Component<Props, State> {
       isFirstStep, isLastStep, next, prev, stop,
     } = this.props;
     this.props.onBackdropPress({
-      isFirstStep, isLastStep, next, prev, stop,
+      isFirstStep,
+      isLastStep,
+      next,
+      prev,
+      stop,
     });
   };
 
+  onMaskPress = () => {
+    const { currentStep } = this.props;
+    const { onElementPress } = currentStep;
+    if (onElementPress) {
+      onElementPress();
+    }
+  };
+
   renderMask() {
-    console.log(this._lastStep);
     /* eslint-disable global-require */
     const MaskComponent =
       this.props.overlay === 'svg' ? require('./SvgMask').default : require('./ViewMask').default;
     /* eslint-enable */
     return (
       <MaskComponent
-        prevCircle={this._lastStep.circle}
         circle={this.props.currentStep.circle}
         animated={this.props.animated}
         layout={this.state.layout}
@@ -283,6 +289,7 @@ class CopilotModal extends Component<Props, State> {
         easing={this.props.easing}
         animationDuration={this.props.animationDuration}
         backdropColor={this.props.backdropColor}
+        onPress={this.onMaskPress}
       />
     );
   }

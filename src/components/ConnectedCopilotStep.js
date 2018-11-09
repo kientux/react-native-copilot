@@ -10,12 +10,12 @@ type Props = {
   active?: boolean,
   circle: boolean,
   _copilot: CopilotContext,
-  children: React$Element
+  children: React$Element,
 };
 
 class ConnectedCopilotStep extends Component<Props> {
   static defaultProps = {
-    active: true
+    active: true,
   };
 
   componentDidMount() {
@@ -48,8 +48,9 @@ class ConnectedCopilotStep extends Component<Props> {
       text: this.props.text,
       order: this.props.order,
       circle: this.props.circle,
+      onElementPress: this.props.onElementPress,
       target: this,
-      wrapper: this.wrapper
+      wrapper: this.wrapper,
     });
   }
 
@@ -65,8 +66,9 @@ class ConnectedCopilotStep extends Component<Props> {
           x: 0,
           y: 0,
           width: 0,
-          height: 0
-        }));
+          height: 0,
+        }),
+      );
     }
 
     return new Promise((resolve, reject) => {
@@ -79,9 +81,9 @@ class ConnectedCopilotStep extends Component<Props> {
                 x,
                 y,
                 width,
-                height
+                height,
               }),
-            reject
+            reject,
           );
         } else {
           requestAnimationFrame(measure);
@@ -94,10 +96,10 @@ class ConnectedCopilotStep extends Component<Props> {
 
   render() {
     const copilot = {
-      ref: wrapper => {
+      ref: (wrapper) => {
         this.wrapper = wrapper;
       },
-      onLayout: () => {} // Android hack
+      onLayout: () => {}, // Android hack
     };
 
     return React.cloneElement(this.props.children, { copilot });
