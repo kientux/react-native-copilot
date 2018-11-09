@@ -40,7 +40,13 @@ type Props = {
   backdropColor: string,
   tooltipContainerStyle?: ViewStyle,
   arrowColor?: string,
-  onBackdropPress: (isFirstStep: boolean, isLastStep: boolean) => void,
+  onBackdropPress: ({
+    isFirstStep: boolean,
+    isLastStep: boolean,
+    next: () => void,
+    prev: () => void,
+    stop: () => void,
+  }) => void,
 };
 
 type State = {
@@ -251,7 +257,12 @@ class CopilotModal extends Component<Props, State> {
   };
 
   onBackdropPress = () => {
-    this.props.onBackdropPress(this.props.isFirstStep, this.props.isLastStep);
+    const {
+      isFirstStep, isLastStep, next, prev, stop,
+    } = this.props;
+    this.props.onBackdropPress({
+      isFirstStep, isLastStep, next, prev, stop,
+    });
   };
 
   renderMask() {
