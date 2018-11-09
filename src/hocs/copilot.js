@@ -42,7 +42,8 @@ const copilot = ({
   androidStatusBarVisible,
   backdropColor,
   tooltipContainerStyle,
-  arrowColor
+  arrowColor,
+  onBackdropPress
 } = {}) => WrappedComponent => {
   class Copilot extends Component<any, State> {
     state = {
@@ -202,6 +203,7 @@ const copilot = ({
             }}
             tooltipContainerStyle={tooltipContainerStyle}
             arrowColor={arrowColor}
+            onBackdropPress={onBackdropPress}
           />
         </View>
       );

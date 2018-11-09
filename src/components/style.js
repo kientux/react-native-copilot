@@ -18,6 +18,9 @@ export default StyleSheet.create({
     bottom: 0,
     zIndex: ZINDEX
   },
+  wrapper: {
+    flex: 1
+  },
   arrow: {
     position: 'absolute',
     borderColor: 'transparent',
