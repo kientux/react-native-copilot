@@ -3,6 +3,7 @@ export type Step = {
   name: string,
   order: number,
   visible: boolean,
+  circle: boolean,
   target: React$Element,
   wrapper: React$Element,
 };
