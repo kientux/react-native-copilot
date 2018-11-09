@@ -35,6 +35,8 @@ const copilot = ({
   animated,
   androidStatusBarVisible,
   backdropColor,
+  tooltipContainerStyle,
+  arrowColor
 } = {}) =>
   (WrappedComponent) => {
     class Copilot extends Component<any, State> {
@@ -192,6 +194,8 @@ const copilot = ({
               androidStatusBarVisible={androidStatusBarVisible}
               backdropColor={backdropColor}
               ref={(modal) => { this.modal = modal; }}
+              tooltipContainerStyle={tooltipContainerStyle}
+              arrowColor={arrowColor}
             />
           </View>
         );

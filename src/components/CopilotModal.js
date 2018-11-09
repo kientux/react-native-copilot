@@ -1,6 +1,6 @@
 // @flow
 import React, { Component } from 'react';
-import { Animated, Easing, View, NativeModules, Modal, StatusBar, Platform } from 'react-native';
+import { Animated, Easing, View, ViewStyle, NativeModules, Modal, StatusBar, Platform } from 'react-native';
 import Tooltip from './Tooltip';
 import StepNumber from './StepNumber';
 import styles, { MARGIN, ARROW_SIZE, STEP_NUMBER_DIAMETER, STEP_NUMBER_RADIUS } from './style';
@@ -21,7 +21,9 @@ type Props = {
   overlay: 'svg' | 'view',
   animated: boolean,
   androidStatusBarVisible: boolean,
-  backdropColor: string
+  backdropColor: string,
+  tooltipContainerStyle?: ViewStyle,
+  arrowColor?: string
 };
 
 type State = {
@@ -130,11 +132,11 @@ class CopilotModal extends Component<Props, State> {
 
     if (verticalPosition === 'bottom') {
       tooltip.top = obj.top + obj.height + MARGIN;
-      arrow.borderBottomColor = '#fff';
+      arrow.borderBottomColor = this.props.arrowColor || '#fff';
       arrow.top = tooltip.top - (ARROW_SIZE * 2);
     } else {
       tooltip.bottom = layout.height - (obj.top - MARGIN);
-      arrow.borderTopColor = '#fff';
+      arrow.borderTopColor = this.props.arrowColor || '#fff';
       arrow.bottom = tooltip.bottom - (ARROW_SIZE * 2);
     }
 
@@ -243,6 +245,7 @@ class CopilotModal extends Component<Props, State> {
     const {
       tooltipComponent: TooltipComponent,
       stepNumberComponent: StepNumberComponent,
+      tooltipContainerStyle
     } = this.props;
 
     return [
@@ -264,7 +267,7 @@ class CopilotModal extends Component<Props, State> {
         />
       </Animated.View>,
       <Animated.View key="arrow" style={[styles.arrow, this.state.arrow]} />,
-      <Animated.View key="tooltip" style={[styles.tooltip, this.state.tooltip]}>
+      <Animated.View key="tooltip" style={[styles.tooltip, this.state.tooltip, tooltipContainerStyle]}>
         <TooltipComponent
           isFirstStep={this.props.isFirstStep}
           isLastStep={this.props.isLastStep}
