@@ -1,6 +1,6 @@
 // @flow
 import React, { Component } from 'react';
-import { View, Animated, Easing, Dimensions, TouchableWithoutFeedback } from 'react-native';
+import { View, Animated, Easing, Dimensions, TouchableHighlight } from 'react-native';
 // import { Svg } from 'expo';
 import Svg from 'react-native-svg';
 import AnimatedSvgPath from './AnimatedPath';
@@ -134,7 +134,7 @@ class SvgMask extends Component<Props, State> {
             />
           </Svg>
         ) : null}
-        <TouchableWithoutFeedback
+        <TouchableHighlight
           style={{
             position: 'absolute',
             top: this.state.position.y._value,
@@ -143,9 +143,10 @@ class SvgMask extends Component<Props, State> {
             height: this.state.size.y._value,
           }}
           onPress={this.props.onPress}
+          underlayColor="transparent"
         >
           <View />
-        </TouchableWithoutFeedback>
+        </TouchableHighlight>
       </View>
     );
   }
