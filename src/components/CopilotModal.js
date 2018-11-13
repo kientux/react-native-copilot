@@ -93,6 +93,27 @@ class CopilotModal extends Component<Props, State> {
     }
   }
 
+  onMaskPress = () => {
+    const { currentStep } = this.props;
+    const { onElementPress } = currentStep;
+    if (onElementPress) {
+      onElementPress();
+    }
+  };
+
+  onBackdropPress = () => {
+    const {
+      isFirstStep, isLastStep, next, prev, stop,
+    } = this.props;
+    this.props.onBackdropPress({
+      isFirstStep,
+      isLastStep,
+      next,
+      prev,
+      stop,
+    });
+  };
+
   layout = {
     width: 0,
     height: 0,
@@ -136,15 +157,15 @@ class CopilotModal extends Component<Props, State> {
     let stepNumberLeft = obj.left - STEP_NUMBER_RADIUS;
 
     if (stepNumberLeft < 0) {
-      stepNumberLeft = obj.left + obj.width - STEP_NUMBER_RADIUS;
+      stepNumberLeft = (obj.left + obj.width) - STEP_NUMBER_RADIUS;
       if (stepNumberLeft > layout.width - STEP_NUMBER_DIAMETER) {
         stepNumberLeft = layout.width - STEP_NUMBER_DIAMETER;
       }
     }
 
     const center = {
-      x: obj.left + obj.width / 2,
-      y: obj.top + obj.height / 2,
+      x: obj.left + (obj.width / 2),
+      y: obj.top + (obj.height / 2),
     };
 
     const relativeToLeft = center.x;
@@ -160,15 +181,15 @@ class CopilotModal extends Component<Props, State> {
 
     if (verticalPosition === 'bottom') {
       const extraTop = this.props.currentStep.circle
-        ? (obj.width - obj.height) / 2 + CIRCLE_EXTRA_RADIUS
+        ? ((obj.width - obj.height) / 2) + CIRCLE_EXTRA_RADIUS
         : 0;
       tooltip.top = obj.top + obj.height + MARGIN + extraTop;
       arrow.borderBottomColor = this.props.arrowColor || '#fff';
-      arrow.top = tooltip.top - ARROW_SIZE * 2;
+      arrow.top = tooltip.top - (ARROW_SIZE * 2);
     } else {
       tooltip.bottom = layout.height - (obj.top - MARGIN);
       arrow.borderTopColor = this.props.arrowColor || '#fff';
-      arrow.bottom = tooltip.bottom - ARROW_SIZE * 2;
+      arrow.bottom = tooltip.bottom - (ARROW_SIZE * 2);
     }
 
     if (horizontalPosition === 'left') {
@@ -252,31 +273,12 @@ class CopilotModal extends Component<Props, State> {
     this.props.stop();
   };
 
-  onBackdropPress = () => {
-    const {
-      isFirstStep, isLastStep, next, prev, stop,
-    } = this.props;
-    this.props.onBackdropPress({
-      isFirstStep,
-      isLastStep,
-      next,
-      prev,
-      stop,
-    });
-  };
-
-  onMaskPress = () => {
-    const { currentStep } = this.props;
-    const { onElementPress } = currentStep;
-    if (onElementPress) {
-      onElementPress();
-    }
-  };
-
   renderMask() {
-    const { currentStep } = this.props;
+    const {
+      currentStep, next, stop, isLastStep,
+    } = this.props;
     const { onElementPress } = currentStep;
-    const onPress = onElementPress || null;
+    const onPress = onElementPress || (isLastStep ? stop : next);
     /* eslint-disable global-require */
     const MaskComponent =
       this.props.overlay === 'svg' ? require('./SvgMask').default : require('./ViewMask').default;
@@ -292,7 +294,7 @@ class CopilotModal extends Component<Props, State> {
         easing={this.props.easing}
         animationDuration={this.props.animationDuration}
         backdropColor={this.props.backdropColor}
-        onPress={onElementPress}
+        onPress={onPress}
       />
     );
   }
@@ -302,7 +304,6 @@ class CopilotModal extends Component<Props, State> {
       tooltipComponent: TooltipComponent,
       stepNumberComponent: StepNumberComponent,
       tooltipContainerStyle,
-      arrowStyle,
     } = this.props;
 
     return [

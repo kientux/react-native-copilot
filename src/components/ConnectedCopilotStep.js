@@ -11,6 +11,7 @@ type Props = {
   circle: boolean,
   _copilot: CopilotContext,
   children: React$Element,
+  onElementPress: () => void
 };
 
 class ConnectedCopilotStep extends Component<Props> {
