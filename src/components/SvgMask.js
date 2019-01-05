@@ -4,17 +4,21 @@ import { View, Animated, Easing, Dimensions, TouchableHighlight } from 'react-na
 // import { Svg } from 'expo';
 import Svg from 'react-native-svg';
 import AnimatedSvgPath from './AnimatedPath';
-import { CIRCLE_EXTRA_RADIUS } from './style';
+import { CIRCLE_EXTRA_RADIUS, BORDER_RADIUS } from './style';
 
 import type { valueXY } from '../types';
 
 const circlePadding = CIRCLE_EXTRA_RADIUS;
 const windowDimensions = Dimensions.get('window');
+const ellipsePath = (size, position, canvasSize): string =>
+  `M0,0H${canvasSize.x}V${canvasSize.y}H0V0ZM${position.x._value + size.x._value/2},${position.y._value - size.y._value/2}
+  a${size.x._value/2},${size.y._value} 0 1,0 1,0Z`;
 const path = (size, position, canvasSize): string =>
-  `M0,0H${canvasSize.x}V${canvasSize.y}H0V0ZM${position.x._value},${position.y._value}H${position.x
-    ._value + size.x._value}V${position.y._value + size.y._value}H${position.x._value}V${
-    position.y._value
-  }Z`;
+  `M0,0H${canvasSize.x}V${canvasSize.y}H0V0ZM${position.x._value + BORDER_RADIUS},${position.y._value}H${position.x
+    ._value + size.x._value - BORDER_RADIUS}a${BORDER_RADIUS},${BORDER_RADIUS} 0 0 1 ${BORDER_RADIUS},${BORDER_RADIUS}
+    V${position.y._value + size.y._value - BORDER_RADIUS}a${BORDER_RADIUS},${BORDER_RADIUS} 0 0 1 -${BORDER_RADIUS},${BORDER_RADIUS}
+    H${position.x._value + BORDER_RADIUS}a${BORDER_RADIUS},${BORDER_RADIUS} 0 0 1 -${BORDER_RADIUS},-${BORDER_RADIUS}
+    V${position.y._value + BORDER_RADIUS}a${BORDER_RADIUS},${BORDER_RADIUS} 0 0 1 ${BORDER_RADIUS},-${BORDER_RADIUS}Z`;
 const circlePath = (size, position, canvasSize): string =>
   `M0,0H${canvasSize.x}V${canvasSize.y}H0V0ZM${position.x._value - circlePadding - 2},${position.y
     ._value +
@@ -69,9 +73,10 @@ class SvgMask extends Component<Props, State> {
   }
 
   animationListener = (): void => {
-    const d: string = this.props.circle
-      ? circlePath(this.state.size, this.state.position, this.state.canvasSize)
-      : path(this.state.size, this.state.position, this.state.canvasSize);
+    let d: string = path(this.state.size, this.state.position, this.state.canvasSize)
+     if(this.props.circle) d = circlePath(this.state.size, this.state.position, this.state.canvasSize)
+     else if(this.props.ellipse) d = ellipsePath(this.state.size, this.state.position, this.state.canvasSize)
+     
     if (this.mask) {
       this.mask.setNativeProps({ d });
     }
@@ -111,6 +116,9 @@ class SvgMask extends Component<Props, State> {
   };
 
   render() {
+     let d = path(this.state.size, this.state.position, this.state.canvasSize)
+     if(this.props.circle) d = circlePath(this.state.size, this.state.position, this.state.canvasSize)
+     else if(this.props.ellipse) d = ellipsePath(this.state.size, this.state.position, this.state.canvasSize)
     return (
       <View pointerEvents="box-none" style={this.props.style} onLayout={this.handleLayout}>
         {this.state.canvasSize ? (
@@ -126,11 +134,7 @@ class SvgMask extends Component<Props, State> {
               fill="rgba(0, 0, 0, 0.4)"
               fillRule="evenodd"
               strokeWidth={1}
-              d={
-                this.props.circle
-                  ? circlePath(this.state.size, this.state.position, this.state.canvasSize)
-                  : path(this.state.size, this.state.position, this.state.canvasSize)
-              }
+              d={d}
             />
           </Svg>
         ) : null}

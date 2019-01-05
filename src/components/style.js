@@ -7,7 +7,8 @@ export const ZINDEX: number = 100;
 export const MARGIN: number = 12;
 export const OFFSET_WIDTH: number = 4;
 export const ARROW_SIZE: number = 6;
-export const CIRCLE_EXTRA_RADIUS = 16;
+export const CIRCLE_EXTRA_RADIUS = 10;
+export const BORDER_RADIUS = 7;
 
 export default StyleSheet.create({
   container: {
