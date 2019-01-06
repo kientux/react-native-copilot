@@ -9,6 +9,7 @@ type Props = {
   order: number,
   active?: boolean,
   circle: boolean,
+  ellipse: boolean,
   _copilot: CopilotContext,
   children: React$Element,
   onElementPress: () => void
@@ -49,6 +50,7 @@ class ConnectedCopilotStep extends Component<Props> {
       text: this.props.text,
       order: this.props.order,
       circle: this.props.circle,
+      ellipse: this.props.ellipse,
       onElementPress: this.props.onElementPress,
       target: this,
       wrapper: this.wrapper,

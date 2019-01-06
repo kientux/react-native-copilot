@@ -286,6 +286,7 @@ class CopilotModal extends Component<Props, State> {
     return (
       <MaskComponent
         circle={this.props.currentStep.circle}
+        ellipse={this.props.currentStep.ellipse}
         animated={this.props.animated}
         layout={this.state.layout}
         style={styles.overlayContainer}
