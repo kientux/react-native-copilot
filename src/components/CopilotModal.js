@@ -343,13 +343,14 @@ class CopilotModal extends Component<Props, State> {
   }
 
   render() {
-    const containerVisible = this.state.containerVisible || this.props.visible;
-    const contentVisible = this.state.layout && containerVisible;
+    const { containerVisible, position, layout } = this.state;
+    const isContainerVisible = containerVisible || this.props.visible;
+    const contentVisible = layout && isContainerVisible;
 
     return (
       <Modal
         animationType="fade"
-        visible={containerVisible}
+        visible={isContainerVisible && (position == null || !isNaN(position.x))}
         onRequestClose={noop}
         transparent
         supportedOrientations={['portrait', 'landscape']}
